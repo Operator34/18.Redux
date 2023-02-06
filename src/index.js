@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import * as actions from "./store/actions";
-
 import { initiateStore } from "./store/store";
 
 const store = initiateStore();
@@ -23,6 +22,10 @@ const App = (second) => {
     const changeTitle = (taskId) => {
         store.dispatch(actions.titleChange(taskId));
     };
+
+    const deletedTask = (taskId) => {
+        store.dispatch(actions.taskDeleted(taskId));
+    };
     return (
         <>
             <h1>App</h1>
@@ -37,6 +40,9 @@ const App = (second) => {
                         </button>
                         <button onClick={() => changeTitle(el.id)}>
                             Change Tittle
+                        </button>
+                        <button onClick={() => deletedTask(el.id)}>
+                            Delete
                         </button>
                         <hr />
                     </li>

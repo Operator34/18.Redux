@@ -1,4 +1,4 @@
-import { taskUpdated } from "./actionTypes";
+import { taskUpdated, taskDelete } from "./actionTypes";
 
 export function taskReducer(state = [], action) {
     // ф которая будет обрабатывать все действия с задачими
@@ -12,6 +12,11 @@ export function taskReducer(state = [], action) {
                 ...newArray[elementIndex],
                 ...action.payload,
             };
+            return newArray;
+        }
+        case taskDelete: {
+            let newArray = [...state];
+            newArray = newArray.filter((el) => el.id !== action.payload.id);
             return newArray;
         }
         default:
