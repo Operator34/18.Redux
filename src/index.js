@@ -1,49 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import * as actions from "./store/actionTypes";
 
-function taskReducer(state, action) {
-    // ф которая будет обрабатывать все действия с задачими
-    switch (action.type) {
-        case "task/completed":
-            const newArray = [...state];
-            const elementIndex = newArray.findIndex(
-                (el) => el.id === action.payload.id
-            );
-            newArray[elementIndex].completed = true;
-            return newArray;
+import { createStore } from "./store/createStore";
+import { taskReducer } from "./store/taskReducer";
 
-        default:
-            break;
-    }
-}
+const initialState = [
+    { id: 1, title: "Task 1", completed: "false" },
+    { id: 2, title: "Task 2", completed: "false" },
+];
+const store = createStore(taskReducer, initialState);
 
-function createStore(reducer, initialState) {
-    // создаем стейт
-    let state = initialState;
-    let listeners = [];
-
-    function getState() {
-        return state;
-    }
-    function dispatch(action) {
-        //изменение состояния стейта
-        state = reducer(state, action);
-        for (let i = 0; i < listeners.length; i++) {
-            const listener = listeners[i];
-            listener();
-        }
-    }
-    function subscribe(listener) {
-        //добавляет слушателей
-        listeners.push(listener);
-    }
-    return { getState, dispatch, subscribe };
-}
-
-const store = createStore(taskReducer, [
-    { id: 1, description: "Task 1", completed: "false" },
-    { id: 2, description: "Task 2", completed: "false" },
-]);
 const App = (second) => {
     const [state, setState] = useState(store.getState());
     // console.log(store.getState()); //получаем состояние
@@ -56,10 +23,16 @@ const App = (second) => {
 
     const completeTask = (taskId) => {
         store.dispatch({
-            type: "task/completed",
-            payload: { id: taskId },
+            type: actions.taskUpdated,
+            payload: { id: taskId, completed: true },
         });
         // console.log(store.getState());
+    };
+    const changeTitle = (taskId) => {
+        store.dispatch({
+            type: actions.taskUpdated,
+            payload: { id: taskId, title: `New title for ${taskId}` },
+        });
     };
     return (
         <>
@@ -68,10 +41,13 @@ const App = (second) => {
             <ul>
                 {state.map((el) => (
                     <li key={el.id}>
-                        <p>{el.description}</p>
+                        <p>{el.title}</p>
                         <p>{` Completed: ${el.completed}`}</p>
                         <button onClick={() => completeTask(el.id)}>
                             complete
+                        </button>
+                        <button onClick={() => changeTitle(el.id)}>
+                            Change Tittle
                         </button>
                         <hr />
                     </li>
