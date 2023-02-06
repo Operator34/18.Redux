@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 
 function taskReducer(state, action) {
@@ -20,6 +20,7 @@ function taskReducer(state, action) {
 function createStore(reducer, initialState) {
     // создаем стейт
     let state = initialState;
+    let listeners = [];
 
     function getState() {
         return state;
@@ -27,8 +28,16 @@ function createStore(reducer, initialState) {
     function dispatch(action) {
         //изменение состояния стейта
         state = reducer(state, action);
+        for (let i = 0; i < listeners.length; i++) {
+            const listener = listeners[i];
+            listener();
+        }
     }
-    return { getState, dispatch };
+    function subscribe(listener) {
+        //добавляет слушателей
+        listeners.push(listener);
+    }
+    return { getState, dispatch, subscribe };
 }
 
 const store = createStore(taskReducer, [
@@ -36,16 +45,21 @@ const store = createStore(taskReducer, [
     { id: 2, description: "Task 2", completed: "false" },
 ]);
 const App = (second) => {
-    console.log(store.getState()); //получаем состояние
+    const [state, setState] = useState(store.getState());
+    // console.log(store.getState()); //получаем состояние
     // store.dispatch({ type: "task/completed", payload: { id: 1 } }); //описываем сначало сущность потом действие, в тайп передаем что необходимо сделать, в пейлоад передаем все данные которые нам нелбходимы для того что найти этот объект в массиве и изменить его
+    useEffect(() => {
+        store.subscribe(() => {
+            setState(store.getState());
+        });
+    }, []);
 
-    const state = store.getState();
     const completeTask = (taskId) => {
         store.dispatch({
             type: "task/completed",
             payload: { id: taskId },
         });
-        console.log(store.getState());
+        // console.log(store.getState());
     };
     return (
         <>
