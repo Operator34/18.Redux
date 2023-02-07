@@ -4,9 +4,10 @@ import {
     applyMiddleware,
 } from "redux";
 import { logger } from "./middlewere/logger";
+import { thunk } from "./middlewere/thunk";
 import taskReducer from "./task";
 
-const middlewareEnhancer = applyMiddleware(logger);
+const middlewareEnhancer = applyMiddleware(logger, thunk);
 
 function configureStore() {
     return createStore(
