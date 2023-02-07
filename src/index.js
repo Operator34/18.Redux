@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import ReactDOM from "react-dom/client";
 import { taskCompleted, titleChange, taskDeleted } from "./store/task";
 import configureStore from "./store/store";
@@ -6,8 +7,7 @@ import configureStore from "./store/store";
 const store = configureStore();
 const App = (second) => {
     const [state, setState] = useState(store.getState());
-    // console.log(store.getState()); //получаем состояние
-    // store.dispatch({ type: "task/completed", payload: { id: 1 } }); //описываем сначало сущность потом действие, в тайп передаем что необходимо сделать, в пейлоад передаем все данные которые нам нелбходимы для того что найти этот объект в массиве и изменить его
+
     useEffect(() => {
         store.subscribe(() => {
             setState(store.getState());
