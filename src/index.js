@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import * as actions from "./store/task/actions";
+import { taskCompleted, titleChange, taskDeleted } from "./store/task";
 import configureStore from "./store/store";
-const store = configureStore();
 
+const store = configureStore();
 const App = (second) => {
     const [state, setState] = useState(store.getState());
     // console.log(store.getState()); //получаем состояние
@@ -15,15 +15,15 @@ const App = (second) => {
     }, []);
 
     const completeTask = (taskId) => {
-        store.dispatch(actions.taskCompleted(taskId));
+        store.dispatch(taskCompleted(taskId));
         // console.log(store.getState());
     };
     const changeTitle = (taskId) => {
-        store.dispatch(actions.titleChange(taskId));
+        store.dispatch(titleChange(taskId));
     };
 
     const deletedTask = (taskId) => {
-        store.dispatch(actions.taskDeleted(taskId));
+        store.dispatch(taskDeleted(taskId));
     };
     return (
         <>
