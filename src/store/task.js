@@ -39,7 +39,7 @@ const { update, remove, recived, taskRequested, taskRequestFailed } = actions;
 // const taskRequested = createAction("task/requested");
 // const taskRequestFailed = createAction("task/requestFailed");
 
-export const getTasks = () => async (dispatch) => {
+export const loadTasks = () => async (dispatch) => {
     dispatch(taskRequested());
     try {
         const data = await todosService.fetch();
@@ -66,5 +66,8 @@ export function taskDeleted(id) {
 export function titleChange(id) {
     return update({ id, title: `New title for ${id}` });
 }
+
+export const getTasks = () => (state) => state.tasks.entities;
+export const getTasksLoadingStatus = () => (state) => state.tasks.isLoading;
 
 export default taskReducer;
