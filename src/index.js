@@ -6,19 +6,14 @@ import configureStore from "./store/store";
 
 const store = configureStore();
 const App = (second) => {
-    const state = useSelector((state) => state);
+    const state = useSelector((state) => state.entities);
+    const isLoading = useSelector((state) => state.isLoading);
+    const error = useSelector((state) => state.error);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getTasks());
     }, []);
-
-    // const completeTask = (taskId) => {
-    //     store.dispatch((dispatch, getState) => {
-    //         console.log(dispatch, getState);
-    //         store.dispatch(taskCompleted(taskId));
-    //     });
-    // };
 
     const changeTitle = (taskId) => {
         dispatch(titleChange(taskId));
@@ -27,6 +22,13 @@ const App = (second) => {
     const deletedTask = (taskId) => {
         dispatch(taskDeleted(taskId));
     };
+
+    if (isLoading) {
+        return <h1>Loading...</h1>;
+    }
+    if (error) {
+        return <p>{error}</p>;
+    }
     return (
         <>
             <h1>App</h1>
