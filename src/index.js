@@ -6,9 +6,10 @@ import configureStore from "./store/store";
 
 const store = configureStore();
 const App = (second) => {
-    const state = useSelector((state) => state.entities);
-    const isLoading = useSelector((state) => state.isLoading);
-    const error = useSelector((state) => state.error);
+    const state = useSelector((state) => state.tasks.entities);
+    const isLoading = useSelector((state) => state.tasks.isLoading);
+    const error = useSelector((state) => state.errors.entities[0]);
+    console.log(error);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -26,6 +27,7 @@ const App = (second) => {
     if (isLoading) {
         return <h1>Loading...</h1>;
     }
+    console.log(error);
     if (error) {
         return <p>{error}</p>;
     }
