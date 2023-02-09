@@ -8,5 +8,12 @@ const todosService = {
         });
         return data;
     },
+    fetchPost: async () => {
+        const { data } = await httpService.post(todosEndpoint, {
+            title: "Это новая таска",
+            completed: true,
+        });
+        return data;
+    },
 };
 export default todosService;

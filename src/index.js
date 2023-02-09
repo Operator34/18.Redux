@@ -3,11 +3,12 @@ import { Provider, useSelector, useDispatch } from "react-redux";
 import ReactDOM from "react-dom/client";
 import {
     titleChange,
-    taskDeleted,
     completeTask,
     loadTasks,
     getTasks,
     getTasksLoadingStatus,
+    createTask,
+    remove,
 } from "./store/task";
 import configureStore from "./store/store";
 import { getError } from "./store/errors";
@@ -15,6 +16,7 @@ import { getError } from "./store/errors";
 const store = configureStore();
 const App = (second) => {
     const state = useSelector(getTasks());
+    console.log(state);
     const isLoading = useSelector(getTasksLoadingStatus());
     const error = useSelector(getError());
     console.log(error);
@@ -29,7 +31,7 @@ const App = (second) => {
     };
 
     const deletedTask = (taskId) => {
-        dispatch(taskDeleted(taskId));
+        dispatch(remove({ id: taskId }));
     };
 
     if (isLoading) {
@@ -56,6 +58,9 @@ const App = (second) => {
                         </button>
                         <button onClick={() => deletedTask(el.id)}>
                             Delete
+                        </button>
+                        <button onClick={() => dispatch(createTask())}>
+                            Добавить таску
                         </button>
                         <hr />
                     </li>
